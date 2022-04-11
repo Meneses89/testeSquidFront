@@ -15,7 +15,22 @@ function setLoading(loading = true) {
 }
 
 //Primeira consulta da API
-search(API_URL).then(showData);
+search(API_URL).then(showData).catch(showError);
+
+//Tratamento de Erro
+function showError(){
+  const postWrapper = document.createElement("div");
+    postWrapper.classList.add("post-wrapper1");
+
+  const postItem = document.createElement("span");
+    postItem.classList.add("item");
+    postItem.innerHTML = " <strong>Ops!</strong><p>Estamos com problemas em nossos servidores. Por favor, tente novamente mais tarde.</p>";
+
+    postWrapper.appendChild(postItem);
+    container.appendChild(postWrapper);
+  
+  setLoading(false)
+}
 
 //Buscar API
 function search(val) {
@@ -57,11 +72,37 @@ function showData(medias, pagination ) {
     const { username } = usuario;
     const userInfo = [username, upvotes, comentarios, criadoEmFormatted ];
 
-    userInfo.map(item => {
-    const postItem = document.createElement("p");
-        postItem.classList.add("item");
-        postItem.innerHTML = item;
-        postInfo.appendChild(postItem);
+    userInfo.map((item, i) => {
+      const itemDiv = document.createElement("div")
+      itemDiv.classList.add("item-div")
+
+      const postIcon = document.createElement("i");
+      postIcon.classList.add("material-icons")
+      switch (i){
+        case 0:
+          postIcon.innerHTML = 'alternate_email';
+          break;
+        case 1:
+          postIcon.innerHTML = 'favorite';
+          break;
+        case 2:
+           postIcon.innerHTML = 'chat_bubble_outline';
+           break;
+        case 3:
+          postIcon.innerHTML = 'calendar_month';
+          break;
+        default:
+          break;  
+      }
+
+      itemDiv.appendChild(postIcon);
+      // -------------------------------------------
+      const postItem = document.createElement("span");
+          postItem.classList.add("item");
+          postItem.innerHTML = item;
+          itemDiv.appendChild(postItem);
+
+          postInfo.appendChild(itemDiv);
         
     });
 
