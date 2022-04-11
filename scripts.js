@@ -2,13 +2,14 @@ const API_URL = "https://us-central1-squid-apis.cloudfunctions.net/test-front-ba
 const container = document.querySelector(".container");
 const load = document.querySelector("#load");
 
+
 function setLoading(loading = true) {
   if (loading === true) {
     let loadingEl = document.createElement("h3");
 
     loadingEl.setAttribute("id", "loading");
     container.appendChild(loadingEl);
-  } else {
+  }else {
     document.getElementById("loading").remove();
   }
 }
@@ -29,12 +30,15 @@ function loadMore(url) {
     .then(showData)
     .then(setLoading(false));
 }
-console.log(API_URL);
 function showData(medias, pagination ) {
     medias.map(element => {
-      
+
     const{criadoEm, upvotes, comentarios, imagens, usuario, link } = element;
     //capturando os dados a serem utilizados
+
+    const criadoEmFormatted = new Intl
+    .DateTimeFormat('pt-br', {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'})
+    .format(new Date(criadoEm));
 
     const postWrapper = document.createElement("div");
     postWrapper.classList.add("post-wrapper");
@@ -51,14 +55,14 @@ function showData(medias, pagination ) {
     postInfo.classList.add("post-info");
 
     const { username } = usuario;
-    const userInfo = [username, upvotes, comentarios, criadoEm ];
+    const userInfo = [username, upvotes, comentarios, criadoEmFormatted ];
 
     userInfo.map(item => {
     const postItem = document.createElement("p");
         postItem.classList.add("item");
-        userInfo[0].innerHTML ="@";
         postItem.innerHTML = item;
         postInfo.appendChild(postItem);
+        
     });
 
     postWrapper.appendChild(postImage);
